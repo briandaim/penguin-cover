@@ -1,0 +1,404 @@
+:root {
+  --paper: #f2ece1;
+  --ink: #1f1c18;
+  --muted: #6e665a;
+  --card: #fffdf9;
+  --line: #ddd4c4;
+  --accent: #ff6600;
+
+  --font-ui: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-futura: "Futura", "Jost", "Century Gothic", sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ================= BARRA SUPERIOR ================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.brand-logo { height: 48px; width: auto; flex: none; }
+.brand h1 {
+  font-family: var(--font-serif);
+  font-size: 27px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.brand p { margin-top: 2px; font-size: 13px; color: var(--muted); }
+
+/* ================= SWITCH (toggle) ================= */
+.switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.track {
+  --tw: 42px;
+  --th: 24px;
+  position: relative;
+  flex: none;
+  width: var(--tw);
+  height: var(--th);
+  border-radius: 999px;
+  background: #d8d0c2;
+  transition: background .2s;
+}
+.track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(var(--th) - 6px);
+  height: calc(var(--th) - 6px);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+  transition: transform .2s;
+}
+.switch input:checked + .track { background: var(--accent); }
+.switch input:checked + .track::after { transform: translateX(calc(var(--tw) - var(--th))); }
+.switch input:focus-visible + .track { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Chip del limón: pequeño, con borde marcado */
+.lemon-chip {
+  flex: none;
+  gap: 8px;
+  padding: 6px 10px 6px 9px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 13px;
+  font-weight: 700;
+}
+.lemon-chip img { width: 18px; height: 18px; object-fit: contain; }
+.lemon-chip .track { --tw: 32px; --th: 18px; }
+
+/* Fila-switch dentro del panel */
+.switch.row {
+  min-height: 46px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* ================= LAYOUT ================= */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 32px;
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 8px 24px 32px;
+}
+
+.stage { display: flex; justify-content: center; }
+
+/* ================= PANEL ================= */
+.panel {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px -18px rgba(60, 40, 10, .35);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+.group legend {
+  padding: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > span { font-size: 13px; font-weight: 600; }
+
+.field input,
+.field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  font-size: 16px; /* 16px evita el zoom automático en iOS */
+  color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+}
+.field input:focus,
+.field select:focus {
+  outline: 0;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(255, 102, 0, .18);
+}
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 38px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%231f1c18' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+}
+
+/* Tamaño del título */
+.size-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.size-row > span { font-size: 13px; font-weight: 600; }
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  overflow: hidden;
+}
+.stepper button {
+  width: 46px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  font: 700 15px var(--font-ui);
+  color: var(--ink);
+  cursor: pointer;
+}
+.stepper button:hover:not(:disabled) { background: #f3ece0; }
+.stepper button:disabled { opacity: .35; cursor: default; }
+.stepper output {
+  min-width: 34px;
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subir imagen */
+.upload {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 1.5px dashed #c9bfae;
+  border-radius: 12px;
+  background: #fbf7ef;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.upload:hover,
+.upload:focus-within { border-color: var(--accent); background: #fff5ec; }
+.upload svg { flex: none; }
+.upload > span { min-width: 0; }
+.upload b { display: block; font-size: 14px; }
+.upload small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Botón de descarga */
+.btn-download {
+  min-height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font: 700 16px var(--font-ui);
+  cursor: pointer;
+  box-shadow: 0 8px 18px -8px rgba(255, 102, 0, .7);
+}
+.btn-download:hover:not(:disabled) { filter: brightness(.95); }
+.btn-download:disabled { opacity: .6; cursor: progress; }
+
+/* ================= PORTADA =================
+   Todas las medidas usan la unidad --u (1 unidad = 1px en una portada de 540px).
+   El script ajusta --u según el ancho real, así todo escala igual en móvil. */
+.cover {
+  --u: 1px;
+  --lemon-opacity: .75;
+
+  width: min(540px, 100%, calc((100vh - 120px) * .653));
+  width: min(540px, 100%, calc((100dvh - 120px) * .653));
+  aspect-ratio: 540 / 827;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #000;
+  box-shadow: 0 18px 40px -16px rgba(40, 25, 5, .5), 0 2px 6px rgba(0, 0, 0, .15);
+}
+.cover.exporting { border-radius: 0; box-shadow: none; }
+
+/* Zona de imagen */
+.art {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background-color: var(--accent);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Limón: pequeño, arriba a la derecha, semitransparente */
+.lemon {
+  display: none;
+  position: absolute;
+  top: calc(30 * var(--u));
+  right: calc(25 * var(--u));
+  width: calc(40 * var(--u));
+  height: calc(46 * var(--u));
+  background: url("resources/lemon.png") center / contain no-repeat;
+  opacity: var(--lemon-opacity);
+  pointer-events: none;
+}
+.cover[data-lemon="true"] .lemon { display: block; }
+
+/* Franja blanca: [texto] [logo] [Ω CLASSICS], con el logo siempre al centro */
+.band {
+  flex: none;
+  height: calc(40 * var(--u));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: calc(22 * var(--u));
+  padding: 0 calc(10 * var(--u));
+  background: #fff;
+  color: #000;
+  font-family: var(--font-futura);
+  font-weight: 700;
+  font-size: calc(12 * var(--u));
+  letter-spacing: .65em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.band-text {
+  justify-self: end;
+  margin-right: -.65em; /* compensa el espacio final del letter-spacing */
+}
+.band-classics { justify-self: start; }
+
+.omega { display: none; }
+.cover[data-omega="true"] .omega { display: inline; }
+
+/* Logo: todas las opciones comparten la misma caja (proporción del pingüino) */
+.logo {
+  width: calc(22 * var(--u));
+  height: calc(31 * var(--u));
+  background: url("resources/penguin.png") center / contain no-repeat;
+}
+.cover[data-logo="ao3"] .logo        { background-image: url("resources/ao3.png"); }
+.cover[data-logo="fanfiction"] .logo { background-image: url("resources/fanfiction.jpeg"); }
+.cover[data-logo="wattpad"] .logo    { background-image: url("resources/wattpad.png"); }
+
+/* Zona negra */
+.info {
+  flex: none;
+  height: calc(214 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--u));
+  padding: 0 calc(32 * var(--u));
+  overflow: hidden;
+  text-align: center;
+}
+.author {
+  font-family: var(--font-futura);
+  font-weight: 500;
+  font-size: calc(25 * var(--u));
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: calc(var(--title-size, 26) * var(--u));
+  line-height: 1.15;
+  letter-spacing: .03em;
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+.subtitle {
+  font-family: var(--font-serif);
+  font-size: calc(16 * var(--u));
+  color: #cfcfcf;
+}
+.subtitle:empty,
+.author:empty,
+.title:empty { display: none; }
+
+/* ================= MÓVIL ================= */
+@media (max-width: 860px) {
+  .topbar { padding: 12px 14px; }
+  .brand-logo { height: 40px; }
+  .brand h1 { font-size: 22px; }
+  .brand p { display: none; }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 4px 14px calc(24px + env(safe-area-inset-bottom));
+  }
+
+  .cover { width: min(540px, 100%); }
+
+  .panel { position: static; padding: 16px; }
+
+  /* El botón de descarga se queda visible mientras recorres el formulario */
+  .btn-download { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); }
+}
