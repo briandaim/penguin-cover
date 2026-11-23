@@ -19,17 +19,26 @@
       <img class="brand-logo" src="resources/penguin.png" alt="">
       <div>
         <h1>Classic Cover Maker</h1>
-
       </div>
     </div>
 
-    <!-- Toggle del limón (esquina superior derecha) -->
-    <label class="switch lemon-chip">
-      <img src="resources/lemon.png" alt="" width="18" height="18">
-      <span class="switch-text"></span>
-      <input type="checkbox" id="lemon">
-      <span class="track"></span>
-    </label>
+    <div class="topbar-actions">
+      <!-- Borra todos los datos rellenables para empezar una portada nueva -->
+      <button type="button" class="btn-new" id="clear-all" title="Clear all fields">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/>
+        </svg>
+        <span class="btn-new-text">New cover</span>
+      </button>
+
+      <!-- Toggle del limón (esquina superior derecha) -->
+      <label class="switch lemon-chip">
+        <img src="resources/lemon.png" alt="" width="18" height="18">
+        <span class="switch-text"></span>
+        <input type="checkbox" id="lemon">
+        <span class="track"></span>
+      </label>
+    </div>
   </header>
 
   <main class="layout">
@@ -43,14 +52,14 @@
         </div>
 
         <div class="band">
-          <span class="band-text" id="out-band-text">PENGUIN</span>
+          <span class="band-text" id="out-band-text"></span>
           <span class="logo" role="img" aria-label="Logo"></span>
           <span class="band-classics"><span class="omega">Ω</span>CLASSICS</span>
         </div>
 
         <div class="info">
-          <p class="author" id="out-author">Autor</p>
-          <p class="title" id="out-title">Título</p>
+          <p class="author" id="out-author"></p>
+          <p class="title" id="out-title"></p>
           <p class="subtitle" id="out-subtitle"></p>
         </div>
 
@@ -65,17 +74,26 @@
 
         <label class="field">
           <span>Author</span>
-          <input type="text" id="author" value="Autor" maxlength="40" enterkeyhint="next">
+          <span class="input-wrap">
+            <input type="text" id="author" placeholder="Author" maxlength="40" enterkeyhint="next">
+            <button type="button" class="clear" data-clear="author" aria-label="Clear author">&times;</button>
+          </span>
         </label>
 
         <label class="field">
           <span>Title</span>
-          <input type="text" id="title" value="Título" maxlength="80" enterkeyhint="next">
+          <span class="input-wrap">
+            <input type="text" id="title" placeholder="Title" maxlength="80" enterkeyhint="next">
+            <button type="button" class="clear" data-clear="title" aria-label="Clear title">&times;</button>
+          </span>
         </label>
 
         <label class="field">
           <span>Subtitle</span>
-          <input type="text" id="subtitle" maxlength="80" enterkeyhint="done">
+          <span class="input-wrap">
+            <input type="text" id="subtitle" placeholder="Subtitle" maxlength="80" enterkeyhint="done">
+            <button type="button" class="clear" data-clear="subtitle" aria-label="Clear subtitle">&times;</button>
+          </span>
         </label>
 
         <div class="size-row">
@@ -91,18 +109,21 @@
       <fieldset class="group">
         <legend>Image</legend>
 
-        <label class="upload" for="image-file">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="16" rx="3"/>
-            <circle cx="9" cy="10" r="1.6"/>
-            <path d="M4 18l5-5 4 4 3-3 4 4"/>
-          </svg>
-          <span>
-            <b>Choose Image</b>
-            <small id="file-name">JPG, PNG o WebP</small>
-          </span>
-          <input type="file" id="image-file" accept="image/*" class="visually-hidden">
-        </label>
+        <div class="upload-row">
+          <label class="upload" for="image-file">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="3"/>
+              <circle cx="9" cy="10" r="1.6"/>
+              <path d="M4 18l5-5 4 4 3-3 4 4"/>
+            </svg>
+            <span>
+              <b>Choose Image</b>
+              <small id="file-name">JPG, PNG o WebP</small>
+            </span>
+            <input type="file" id="image-file" accept="image/*" class="visually-hidden">
+          </label>
+          <button type="button" class="clear clear-image" id="clear-image" aria-label="Remove image" hidden>&times;</button>
+        </div>
       </fieldset>
 
       <fieldset class="group">
@@ -110,7 +131,10 @@
 
         <label class="field">
           <span>Left side text</span>
-          <input type="text" id="band-text" value="PENGUIN" maxlength="14" enterkeyhint="done">
+          <span class="input-wrap">
+            <input type="text" id="band-text" placeholder="PENGUIN" maxlength="14" enterkeyhint="done">
+            <button type="button" class="clear" data-clear="band-text" aria-label="Clear left side text">&times;</button>
+          </span>
         </label>
 
         <label class="field">
@@ -131,6 +155,34 @@
       </fieldset>
 
       <button type="button" class="btn-download" id="download">Download</button>
+
+      <!-- ================= PORTADA PARA EBOOK ================= -->
+      <hr class="divider">
+      <fieldset class="group ebook">
+        <legend>Ebook cover</legend>
+        <p class="hint">Put this cover on your ebook. The file is processed in your browser and never uploaded.</p>
+
+        <label class="upload" for="ebook-file">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5A2.5 2.5 0 0 0 4 21.5"/>
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19"/>
+          </svg>
+          <span>
+            <b>Choose ebook</b>
+            <small id="ebook-name">EPUB, KEPUB, FB2, CBZ o PDF</small>
+          </span>
+          <input type="file" id="ebook-file" accept=".epub,.kepub,.fb2,.cbz,.pdf,application/epub+zip,application/pdf" class="visually-hidden">
+        </label>
+
+        <label class="switch row" id="ebook-replace-row" hidden>
+          <span class="switch-text">Replace first page</span>
+          <input type="checkbox" id="ebook-replace">
+          <span class="track"></span>
+        </label>
+
+        <button type="button" class="btn-secondary" id="ebook-apply" disabled>Apply cover &amp; download</button>
+        <p class="status" id="ebook-status" role="status" aria-live="polite"></p>
+      </fieldset>
     </form>
 
   </main>

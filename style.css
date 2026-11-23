@@ -382,6 +382,82 @@ body {
 .author:empty,
 .title:empty { display: none; }
 
+/* ================= ACCIONES SUPERIORES ================= */
+.topbar-actions { display: flex; align-items: center; gap: 10px; flex: none; }
+
+.btn-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font: 700 13px var(--font-ui);
+  cursor: pointer;
+}
+.btn-new:hover { background: #fff5ec; border-color: var(--accent); color: var(--accent); }
+.btn-new:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ================= BORRAR CAMPO ================= */
+.input-wrap { position: relative; display: block; }
+.input-wrap input { padding-right: 44px; }
+
+.clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: #eee6d8;
+  color: var(--muted);
+  font: 400 20px/1 var(--font-ui);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.clear:hover,
+.clear:focus-visible { background: var(--accent); color: #fff; outline: 0; }
+
+.input-wrap .clear {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+}
+/* Solo se muestra cuando el campo tiene texto */
+.input-wrap input:placeholder-shown + .clear { display: none; }
+
+.upload-row { display: flex; align-items: center; gap: 10px; }
+.upload-row .upload { flex: 1 1 auto; min-width: 0; }
+.clear-image { flex: none; }
+.clear-image[hidden] { display: none; }
+
+/* ================= EBOOK ================= */
+.divider { border: 0; border-top: 1px solid var(--line); margin: 2px 0; }
+.hint { font-size: 13px; line-height: 1.45; color: var(--muted); }
+
+.btn-secondary {
+  min-height: 48px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: 700 15px var(--font-ui);
+  cursor: pointer;
+}
+.btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.btn-secondary:disabled { opacity: .45; cursor: not-allowed; }
+
+.switch.row[hidden] { display: none; }
+
+.status { min-height: 1.2em; font-size: 13px; line-height: 1.45; color: var(--muted); }
+.status.ok { color: #2f7a3b; }
+.status.error { color: #b3261e; }
+
 /* ================= MÓVIL ================= */
 @media (max-width: 860px) {
   .topbar { padding: 12px 14px; }
@@ -400,5 +476,12 @@ body {
   .panel { position: static; padding: 16px; }
 
   /* El botón de descarga se queda visible mientras recorres el formulario */
-  .btn-download { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .btn-download { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 1; }
+}
+
+@media (max-width: 480px) {
+  .brand-logo { height: 34px; }
+  .brand h1 { font-size: 19px; }
+  .btn-new { padding: 6px 9px; }
+  .btn-new-text { display: none; }
 }
