@@ -98,7 +98,8 @@ body {
 .lemon-chip {
   flex: none;
   gap: 8px;
-  padding: 6px 10px 6px 9px;
+  height: 38px;
+  padding: 0 10px 0 9px;
   border: 2px solid var(--ink);
   border-radius: 999px;
   background: var(--card);
@@ -389,8 +390,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 36px;
-  padding: 6px 12px;
+  height: 38px;
+  padding: 0 12px;
   border: 2px solid var(--ink);
   border-radius: 999px;
   background: var(--card);
@@ -413,14 +414,15 @@ body {
   height: 30px;
   border: 0;
   border-radius: 50%;
-  background: #eee6d8;
-  color: var(--muted);
-  font: 400 20px/1 var(--font-ui);
+  background: transparent;
+  color: var(--ink);
+  opacity: .35;
+  font: 400 22px/1 var(--font-ui);
   cursor: pointer;
-  transition: background .15s, color .15s;
+  transition: opacity .15s, background .15s;
 }
 .clear:hover,
-.clear:focus-visible { background: var(--accent); color: #fff; outline: 0; }
+.clear:focus-visible { opacity: .8; background: rgba(31, 28, 24, .07); outline: 0; }
 
 .input-wrap .clear {
   position: absolute;
