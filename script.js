@@ -663,6 +663,15 @@
   };
   const UNSUPPORTED = /\.(mobi|azw3?|kfx|prc|cbr|cb7|djvu|lit)$/i;
 
+  const customInput = $("custom-cover-file");
+  const customRow = $("custom-cover-row");
+  const customName = $("custom-cover-name");
+  const customThumb = $("custom-cover-thumb");
+  const customIcon = $("custom-cover-icon");
+  const customClear = $("clear-custom-cover");
+  const CUSTOM_HINT = customName.textContent;
+  let customFile = null;
+
   const ebookInput = $("ebook-file");
   const ebookName = $("ebook-name");
   const ebookApply = $("ebook-apply");
@@ -676,6 +685,70 @@
     ebookStatus.textContent = msg;
     ebookStatus.className = "status" + (kind ? " " + kind : "");
   };
+
+  const coverSource = () => document.querySelector('input[name="cover-source"]:checked').value;
+
+  // El botón se habilita cuando hay libro y, si se eligió "My image", también imagen.
+  const refreshApply = () => {
+    const custom = coverSource() === "custom";
+    customRow.hidden = !custom;
+    ebookApply.disabled = !ebookFile || (custom && !customFile);
+    if (!ebookFile) return;
+    const fmt = FORMATS[ebookFormat].label;
+    if (custom && !customFile) setStatus(`${fmt} listo. Elige la imagen de portada.`);
+    else if (custom) setStatus(`${fmt} listo. Se usará tu imagen: ${customFile.name}.`);
+    else setStatus(`${fmt} listo. Se usará la portada que tienes en pantalla.`);
+  };
+
+  const setCustomFile = (file) => {
+    if (customThumb.src) URL.revokeObjectURL(customThumb.src);
+    customFile = file;
+    if (file) {
+      customThumb.src = URL.createObjectURL(file);
+      customName.textContent = file.name;
+    } else {
+      customThumb.removeAttribute("src");
+      customName.textContent = CUSTOM_HINT;
+    }
+    customThumb.hidden = !file;
+    customIcon.style.display = file ? "none" : "";
+    customClear.hidden = !file;
+    refreshApply();
+  };
+
+  for (const radio of document.querySelectorAll('input[name="cover-source"]')) {
+    radio.addEventListener("change", refreshApply);
+  }
+  customInput.addEventListener("change", () => {
+    const file = customInput.files && customInput.files[0];
+    customInput.value = "";
+    if (file) setCustomFile(file);
+  });
+  customClear.addEventListener("click", () => setCustomFile(null));
+
+  // Imagen propia → canvas (máx. 3000px por lado, sin recortar ni deformar).
+  const fileToCanvas = (file, maxSide = 3000) =>
+    new Promise((resolve, reject) => {
+      const src = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(src);
+        const k = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.naturalWidth * k);
+        canvas.height = Math.round(img.naturalHeight * k);
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#fff"; // fondo blanco para PNG con transparencia (JPEG no la admite)
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(resample(img, canvas.width, canvas.height), 0, 0, canvas.width, canvas.height);
+        resolve(canvas);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(src);
+        reject(new UserError("No se pudo abrir esa imagen. Prueba con un JPG o PNG."));
+      };
+      img.src = src;
+    });
 
   const formatOf = (name) => {
     const lower = name.toLowerCase();
@@ -710,19 +783,20 @@
     ebookFormat = format;
     ebookName.textContent = file.name;
     replaceRow.hidden = !FORMATS[format].canReplace;
-    ebookApply.disabled = false;
-    setStatus(`${FORMATS[format].label} listo. Se usará la portada que tienes en pantalla.`);
+    refreshApply();
   });
 
   ebookApply.addEventListener("click", async () => {
     if (!ebookFile || !ebookFormat) return;
+    const custom = coverSource() === "custom";
+    if (custom && !customFile) return;
     const label = ebookApply.textContent;
     ebookApply.disabled = true;
     ebookApply.textContent = "Procesando…";
-    setStatus("Generando la portada…");
+    setStatus(custom ? "Preparando tu imagen…" : "Generando la portada…");
 
     try {
-      const canvas = await renderCover();
+      const canvas = custom ? await fileToCanvas(customFile) : await renderCover();
       const art = {
         width: canvas.width,
         height: canvas.height,
@@ -743,8 +817,8 @@
         ? err.message
         : "No se pudo aplicar la portada a este archivo.", "error");
     } finally {
-      ebookApply.disabled = false;
       ebookApply.textContent = label;
+      ebookApply.disabled = !ebookFile || (coverSource() === "custom" && !customFile);
     }
   });
 })();

@@ -439,6 +439,47 @@ body {
 .clear-image[hidden] { display: none; }
 
 /* ================= EBOOK ================= */
+/* Selector de origen de la portada */
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #f6f0e6;
+}
+.segmented label { position: relative; cursor: pointer; }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: background .15s, color .15s, box-shadow .15s;
+}
+.segmented input:checked + span {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 4px rgba(60, 40, 10, .18);
+}
+.segmented input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.upload-row[hidden] { display: none; }
+.thumb {
+  flex: none;
+  width: 30px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+}
+.thumb[hidden] { display: none; }
+
 .divider { border: 0; border-top: 1px solid var(--line); margin: 2px 0; }
 .hint { font-size: 13px; line-height: 1.45; color: var(--muted); }
 
